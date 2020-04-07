@@ -15,7 +15,7 @@ const bodyParser = require('body-parser');
 const app = express();
 const HTTP_PORT = process.env.PORT || 8080;
 // Or use some other port number that you like better
-
+/*
 const URI = process.env.MONGODB_URI || process.env.DB_DEV;
 
 //setting up the mongoose
@@ -33,6 +33,8 @@ mongoose
   .catch(err => {
     return console.log("MongoDB failed to connect: " + err);
   });
+
+  */
 // Add support for incoming JSON entities
 app.use(bodyParser.json());
 // Add support for CORS
