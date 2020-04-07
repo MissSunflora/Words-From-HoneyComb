@@ -24,7 +24,7 @@ var engSchema = new Schema({
     fieldOfStudy : String,
     helpYes : Number,
     helpNo : Number,
-    definitions: [
+    Definitions: [
         {
             authorName: String,
             dateCreated: String,

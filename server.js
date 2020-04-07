@@ -3,7 +3,6 @@
 Name: Nesa Bertanico
 Heroku: https://gentle-reaches-62730.herokuapp.com/
 
-
 */
 // ################################################################################
 // Web service setup
@@ -14,7 +13,6 @@ const path = require("path");
 const bodyParser = require('body-parser');
 const app = express();
 const HTTP_PORT = process.env.PORT || 8080;
-const host = '0.0.0.0';
 // Or use some other port number that you like better
 
 // Add support for incoming JSON entities
@@ -31,14 +29,12 @@ const manager = require("./manager.js");
 const m = manager();
 
 
-
 // ################################################################################
 // Deliver the app's home page to browser clients
 
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "/index.html"));
 });
-
 
 
 // ################################################################################
@@ -49,22 +45,24 @@ app.get("/api", (req, res) => {
   // YOU MUST EDIT THIS COLLECTION
   const links = [];
   // This app's resources...
+  // links.push({ "rel": "collection", "href": "/", "methods": "GET,POST" });
   links.push({ "rel": "collection", "href": "/api/terms/english", "methods": "GET,POST" });
-  links.push({ "rel": "collection", "href": "/api/languages", "methods": "GET" });
-  //links.push({ "rel": "collection", "href": "/api/terms/english", "methods": "GET" });
-  links.push({ "rel": "collection", "href": "/api/terms/detail/:id", "methods": "GET" });
-  //links.push({ "rel": "collection", "href": "/api/languages", "methods": "GET" });
-  //links.push({ "rel": "collection", "href": "/api/languages", "methods": "GET" });
-  //links.push({ "rel": "collection", "href": "/api/languages", "methods": "GET" });
-  
-  // Example resources...
-  //links.push({ "rel": "collection", "href": "/api/customers", "methods": "GET,POST" });
-  //links.push({ "rel": "collection", "href": "/api/employees", "methods": "GET,POST" });
+  links.push({ "rel": "item", "href": "/api/terms/english/:id", "methods": "GET" });
+  links.push({ "rel": "item", "href": "/api/terms/english/:id/add-defition", "methods": "PUT" });
+  links.push({ "rel": "item", "href": "/api/terms/english/helpyes/:id", "methods": "PUT" });
+  links.push({ "rel": "item", "href": "/api/terms/english/helpno/:id", "methods": "PUT" });
+
+  links.push({ "rel": "collection", "href": "/api/terms/other", "methods": "GET,POST" });
+  links.push({ "rel": "item", "href": "/api/terms/other/:id", "methods": "GET" });
+  links.push({ "rel": "item", "href": "/api/terms/other/:id/add-defition", "methods": "PUT" });
+  links.push({ "rel": "item", "href": "/api/terms/other/helpyes/:id", "methods": "PUT" });
+  links.push({ "rel": "item", "href": "/api/terms/other/helpno/:id", "methods": "PUT" });
+
   const linkObject = { 
-    "apiName": "Web API assignment 1",
-    "apiDescription": "originally Peter McIntyre's code, but some components are changed to fit the bti a2",
+    "apiName": "Web API assignment 2",
+    "apiDescription": "BTI425 - A2",
     "apiVersion": "1.0", 
-    "apiAuthor": "Nesa B",
+    "apiAuthor": "Royce Ayroso-Ong",
     "links": links
   };
   res.json(linkObject);
@@ -75,10 +73,10 @@ app.get("/api", (req, res) => {
 // ################################################################################
 // Request handlers for data entities (listeners)
 
-// Get all
+// Get all ENGLISH
 app.get("/api/terms/english", (req, res) => {
   // Call the manager method
-  m.englishGetAll()
+  m.englishTermGetAll()
     .then((data) => {
       res.json(data);
     })
@@ -86,24 +84,25 @@ app.get("/api/terms/english", (req, res) => {
       res.status(500).json({ "message": error });
     })
 });
+
+// Get one ENGLISH
+app.get("/api/terms/english/:id", (req, res) => {
+  // Call the manager method
+  m.englishTermGetById(req.params.id)
+    .then((data) => {
+      res.json(data);
+    })
+    .catch(() => {
+      res.status(404).json({ "message": "Resource not found" });
+    })
+});
+
 /*
-// Get one
-app.get("/api/terms/detail/:id", (req, res) => {
-  // Call the manager method
-  m.englishGetById(req.params.id)
-    .then((data) => {
-      res.json(data);
-    })
-    .catch(() => {
-      res.status(404).json({ "message": "Resource not found" });
-      //console.log("id: "+req.params.id);
-    })
-});
 
-// Add new
-app.post("/api/terms/create", (req, res) => {
+// Add new ENGLISH
+app.post("/api/terms/english", (req, res) => {
   // Call the manager method
-  m.englishAdd(req.body)
+  m.englishTermAdd(req.body)
     .then((data) => {
       res.json(data);
     })
@@ -112,10 +111,10 @@ app.post("/api/terms/create", (req, res) => {
     })
 });
 
-// Edit existing
-app.put("/api/terms/definition/:id", (req, res) => {
+// Edit existing ENGLISH - add-definition
+app.put("/api/terms/english/:id/add-definition", (req, res) => {
   // Call the manager method
-  m.englishEdit(req.body)
+  m.englishTermEdit(req.body)
     .then((data) => {
       res.json(data);
     })
@@ -124,19 +123,104 @@ app.put("/api/terms/definition/:id", (req, res) => {
     })
 });
 
-// Delete item
-app.delete("/api/cars/:id", (req, res) => {
+// Edit existing ENGLISH - help YES
+app.put("/api/terms/english/helpyes/:id", (req, res) => {
   // Call the manager method
-  m.carDelete(req.params.id)
-    .then(() => {
-      res.status(204).end();
+  m.englishTermEdit(req.body)
+    .then((data) => {
+      res.json(data);
+    })
+    .catch(() => {
+      res.status(404).json({ "message": "Resource not found" });
+    })
+});
+
+// Edit existing ENGLISH - help NO
+app.put("/api/terms/english/helpno/:id", (req, res) => {
+  // Call the manager method
+  m.englishTermEdit(req.body)
+    .then((data) => {
+      res.json(data);
+    })
+    .catch(() => {
+      res.status(404).json({ "message": "Resource not found" });
+    })
+});
+
+// ################################################################################
+
+// Get all OTHER
+app.get("/api/terms/other", (req, res) => {
+  // Call the manager method
+  m.otherTermGetAll()
+    .then((data) => {
+      res.json(data);
+    })
+    .catch((error) => {
+      res.status(500).json({ "message": error });
+    })
+});
+
+// Get one OTHER
+app.get("/api/terms/other/:id", (req, res) => {
+  // Call the manager method
+  m.otherTermGetById(req.params.id)
+    .then((data) => {
+      res.json(data);
+    })
+    .catch(() => {
+      res.status(404).json({ "message": "Resource not found" });
+    })
+});
+
+// Add new OTHER
+app.post("/api/terms/other", (req, res) => {
+  // Call the manager method
+  m.otherTermAdd(req.body)
+    .then((data) => {
+      res.json(data);
+    })
+    .catch((error) => {
+      res.status(500).json({ "message": error });
+    })
+});
+
+// Edit existing OTHER - add-definition
+app.put("/api/terms/other/:id/add-definition", (req, res) => {
+  // Call the manager method
+  m.otherTermEdit(req.body)
+    .then((data) => {
+      res.json(data);
+    })
+    .catch(() => {
+      res.status(404).json({ "message": "Resource not found" });
+    })
+});
+
+// Edit existing OTHER - help YES
+app.put("/api/terms/other/helpyes/:id", (req, res) => {
+  // Call the manager method
+  m.otherTermEdit(req.body)
+    .then((data) => {
+      res.json(data);
+    })
+    .catch(() => {
+      res.status(404).json({ "message": "Resource not found" });
+    })
+});
+
+// Edit existing OTHER - help NO
+app.put("/api/terms/other/helpno/:id", (req, res) => {
+  // Call the manager method
+  m.otherTermEdit(req.body)
+    .then((data) => {
+      res.json(data);
     })
     .catch(() => {
       res.status(404).json({ "message": "Resource not found" });
     })
 });
 */
-
 
 // ################################################################################
 // Resource not found (this should be at the end)
@@ -152,10 +236,23 @@ app.use((req, res) => {
 // tell the app to start listening for requests
 
 m.connect().then(() => {
-  //app.listen(process.env.PORT || 3000, function(){console.log("Express server listening on port %d in %s mode", this.address().port, app.settings.env)});
   app.listen(HTTP_PORT, () => { console.log("Ready to handle requests on port " + HTTP_PORT) });
 })
   .catch((err) => {
     console.log("Unable to start the server:\n" + err);
     process.exit();
   });
+
+/*
+  // Delete item ENGLISH
+  app.delete("/api/cars/:id", (req, res) => {
+    // Call the manager method
+    m.carDelete(req.params.id)
+      .then(() => {
+        res.status(204).end();
+      })
+      .catch(() => {
+        res.status(404).json({ "message": "Resource not found" });
+      })
+  });
+*/
