@@ -45,14 +45,14 @@ app.get("/api", (req, res) => {
   // YOU MUST EDIT THIS COLLECTION
   const links = [];
   // This app's resources...
-  
+  //https://polar-stream-23993.herokuapp.com/api/terms/english/helpyes/5e8c1eda1c9d4400004402a4"
   /* ------------        ENGLISH            ------------- */
   links.push({ "rel": "collection", "href": "/api/terms/english", "methods": "GET,POST" });
   links.push({ "rel": "collection", "href": "/api/terms/english/:id", "methods": "GET" });
   links.push({ "rel": "collection", "href": "/api/terms/english/name/:word", "methods": "GET" });
   links.push({ "rel": "collection", "href": "/api/terms/english/:id/add-definition", "methods": "POST" });
-  links.push({ "rel": "collection", "href": "/api/terms/english/helpYes/:id", "methods": "PUT" });
-  links.push({ "rel": "collection", "href": "/api/terms/english/helpNo/:id", "methods": "PUT" });
+  links.push({ "rel": "collection", "href": "/api/terms/english/helpyes/:id", "methods": "PUT" });
+  links.push({ "rel": "collection", "href": "/api/terms/english/helpno/:id", "methods": "PUT" });
   links.push({ "rel": "collection", "href": "/api/terms/english/definition-like/:id", "methods": "PUT" });
   links.push({ "rel": "collection", "href": "/api/terms/english/download", "methods": "GET" });
 
@@ -105,7 +105,7 @@ app.get("/api/terms/english/:id", (req, res) => {
       res.status(404).json({ "message": "Resource not found" });
     })
 });
-/*
+
 //links.push({ "rel": "collection", "href": "/api/terms/english/name/:word", "methods": "GET" });
 app.get('/api/terms/english/name/:word', (req, res) => {
   console.log(req.params.word);
@@ -127,10 +127,10 @@ app.put('/api/terms/english/:id/add-definition', (req, res) => {
   .catch(() => {
     res.status(404).json({ "message": "Resource not found"});
   })
-})
+});
 
 //links.push({ "rel": "collection", "href": "/api/terms/english/helpYes/:id", "methods": "PUT" });
-app.put('/api/terms/english/helpYes/:id', (req, res) => {
+app.put('/api/terms/english/helpyes/:id', (req, res) => {
   m.termIncrementHelpYes(req.params.id, req.body)
   .then((data) => {
     res.json(data)
@@ -141,7 +141,7 @@ app.put('/api/terms/english/helpYes/:id', (req, res) => {
 });
 
 //links.push({ "rel": "collection", "href": "/api/terms/english/helpNo/:id", "methods": "PUT" });
-app.put('/api/terms/english/helpNo/:id', (req, res) => {
+app.put('/api/terms/english/helpno/:id', (req, res) => {
   console.log("hi");
   m.termIncrementHelpNo(req.params.id, req.body)
   .then((data) => {
@@ -273,7 +273,19 @@ app.post('/api/terms/other', (req, res) => {
   .catch((error) => {
   res.status(500).json({ "message": error });
   })
-});*/
+});/**/
+
+app.post('/api/terms/english', (req, res) => {
+  // call the manager method
+  console.log(req.body)
+  m.termAdd(req.body)
+  .then((data) => {
+      res.status(201).json(data);
+  })
+  .catch((error) => {
+  res.status(500).json({ "message": error });
+  })
+})
 
 
 // ################################################################################

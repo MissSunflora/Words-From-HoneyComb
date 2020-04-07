@@ -134,11 +134,11 @@ module.exports = function () {
       });
     })
   },
-/*
+
   //links.push({ "rel": "collection", "href": "/api/terms/english/name/:word", "methods": "GET" });
   termGetByWord: async function(word) {
     word = decodeURIComponent(word);
-    let results = await termEnglish.find({ wordEnglish: { $regex: word, $options: "i" } });
+    let results = await EnglishTerms.find({ wordEnglish: { $regex: word, $options: "i" } });
     return results;
 },
 
@@ -147,7 +147,7 @@ module.exports = function () {
 termAddDefinitionEdit: async function (itemId, newItem) {
 
   // Attempt to locate the existing document
-  let term = await termEnglish.findById(itemId);
+  let term = await EnglishTerms.findById(itemId);
 
   if (term) {
       term.definitions.push(newItem);
@@ -162,7 +162,7 @@ termAddDefinitionEdit: async function (itemId, newItem) {
   termIncrementHelpYes: async function (itemId, newItem) {
     if (newItem._id !== itemId) throw "ID not found";
 
-    let term = await termEnglish.findById(itemId);
+    let term = await EnglishTerms.findById(itemId);
 
     if (term) {
         term.helpYes++;
@@ -178,7 +178,7 @@ termAddDefinitionEdit: async function (itemId, newItem) {
   termIncrementHelpNo: async function (itemId, newItem) {
     if (newItem._id !== itemId) throw "ID not found";
 
-    let term = await termEnglish.findById(itemId);
+    let term = await EnglishTerms.findById(itemId);
 
     if (term) {
         term.helpNo++;
@@ -192,7 +192,7 @@ termAddDefinitionEdit: async function (itemId, newItem) {
 
   //links.push({ "rel": "collection", "href": "/api/terms/english/definition-like/:id", "methods": "PUT" });
   termIncrementLikes: async function(itemId, newItem) {
-    let term = await termEnglish.findOne({"definitions._id": itemId});
+    let term = await EnglishTerms.findOne({"definitions._id": itemId});
     // find id for definition
     if (term) {
         let def = term.definitions.id(itemId);
@@ -203,13 +203,13 @@ termAddDefinitionEdit: async function (itemId, newItem) {
     }
     else throw "Not found";
 },
-*/
+/**/
   //links.push({ "rel": "collection", "href": "/api/terms/english/download", "methods": "GET" });
   /* NOT IN USE !!
   termAdd: function(newItem) {
     return new Promise((resolve, reject) => {
 
-        termEnglish.create(newItem, (error, item) => {
+        EnglishTerms.create(newItem, (error, item) => {
             if (error) {
                 // Cannot add item
                 return reject(error.message);
@@ -221,11 +221,11 @@ termAddDefinitionEdit: async function (itemId, newItem) {
 },*/
 
 // ######################################-        OTHER           -##########################################
-/*   
+  
   //links.push({ "rel": "collection", "href": "/api/terms/other", "methods": "GET,POST" });
   otherGetAll: function() {
             return new Promise((resolve, reject) => {
-                termNonEnglish.find()
+                OtherTerms.find()
                 .sort({wordNonEnglish: 'asc'})
                 .exec((error, items) => {
                     if (error) {
@@ -243,7 +243,7 @@ termAddDefinitionEdit: async function (itemId, newItem) {
     return new Promise((resolve, reject) => {
 
         // Find one specific document
-        termNonEnglish.findById(itemId)
+        OtherTerms.findById(itemId)
         .exec((error, item) => {
             if (error) {
                 return reject(error.message);
@@ -261,13 +261,13 @@ termAddDefinitionEdit: async function (itemId, newItem) {
   //links.push({ "rel": "collection", "href": "/api/terms/other/name/:word", "methods": "GET" });
   otherGetByWord: async function(word) {
     word = decodeURIComponent(word);
-    let results = await termNonEnglish.find({ wordNonEnglish: { $regex: word, $options: "i" } });
+    let results = await OtherTerms.find({ wordNonEnglish: { $regex: word, $options: "i" } });
     return results;
 },
 
   //links.push({ "rel": "collection", "href": "/api/terms/other/definition-like/:idn", "methods": "POST" });
   otherIncrementLikes: async function(itemId, newItem) {
-    let term = await termNonEnglish.findOne({"definitions._id": itemId});
+    let term = await OtherTerms.findOne({"definitions._id": itemId});
     console.log(term);
     // find id for definition
     if (term) {
@@ -284,7 +284,7 @@ termAddDefinitionEdit: async function (itemId, newItem) {
  // links.push({ "rel": "collection", "href": "/api/terms/other/helpYes/:id", "methods": "PUT" });
  otherIncrementHelpYes: async function (itemId, newItem) {
   if (newItem._id !== itemId) throw "ID not found";
-  let term = await termNonEnglish.findById(itemId);
+  let term = await OtherTerms.findById(itemId);
 
   if (term) {
       term.helpYes++;
@@ -299,7 +299,7 @@ termAddDefinitionEdit: async function (itemId, newItem) {
   //links.push({ "rel": "collection", "href": "/api/terms/other/helpNo/:id", "methods": "PUT" });
   otherIncrementHelpNo: async function (itemId, newItem) {
     if (newItem._id !== itemId) throw "ID not found";
-    let term = await termNonEnglish.findById(itemId);
+    let term = await OtherTerms.findById(itemId);
 
     if (term) {
         term.helpNo++;
@@ -315,7 +315,7 @@ termAddDefinitionEdit: async function (itemId, newItem) {
   otherAddDefinitionEdit: async function (itemId, newItem) {
 
     // Attempt to locate the existing document
-    let term = await termNonEnglish.findById(itemId);
+    let term = await OtherTerms.findById(itemId);
     console.log(term)
     if (term) {
         term.definitions.push(newItem);
@@ -325,14 +325,14 @@ termAddDefinitionEdit: async function (itemId, newItem) {
     else {
         throw "Not found";
     }
-},*/
+},/* */
   //links.push({ "rel": "collection", "href": "/api/terms/other/download", "methods": "GET" });
 
   /*NOT IN USE
   otherAdd: function(newItem) {
             return new Promise((resolve, reject) => {
 
-                termNonEnglish.create(newItem, (error, item) => {
+                OtherTerms.create(newItem, (error, item) => {
                     if (error) {
                         // Cannot add item
                         return reject(error.message);
