@@ -38,7 +38,9 @@ module.exports = function () {
         // Replace the database name with your own value
         //mongodb+srv://nesa:^(Nesa69@cluster0-dbtwp.mongodb.net/test?retryWrites=true&w=majority
         //mongodb+srv://dbUser:1amApassword@senecaweb-v2sgh.mongodb.net/test?retryWrites=true&w=majority
-        mongoose.connect('mongodb+srv://nesa:^(Nesa69@cluster0-dbtwp.mongodb.net/test?retryWrites=true&w=majority',
+        mongoose.connect(
+          //'mongodb+srv://rjayroso-ong:321456@bti-ra6an.mongodb.net/test?retryWrites=true&w=majority',
+          'mongodb+srv://nesa:^(Nesa69@cluster0-dbtwp.mongodb.net/test?retryWrites=true&w=majority',
              { connectTimeoutMS: 5000, useUnifiedTopology: true , dbName: "Terms"});
         
         // This one works for MongoDB Atlas...
@@ -70,7 +72,7 @@ module.exports = function () {
         // https://nodejs.org/api/events.html#events_emitter_once_eventname_listener
         db.once('open', () => {
           console.log('Connection to the database was successful');
-          EngTerm = db.model("TermEnglish", engSchema, "TermEnglish")
+          EngTerm = db.model("EngTerm", engSchema, "TermEnglish")
           // Add others here...
 
           resolve();
