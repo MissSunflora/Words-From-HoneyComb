@@ -13,7 +13,7 @@ const cors = require("cors");
 const path = require("path");
 const bodyParser = require('body-parser');
 const app = express();
-const HTTP_PORT = process.env.PORT || 8080;
+const HTTP_PORT = process.env.PORT || 3000;
 const host = '0.0.0.0';
 // Or use some other port number that you like better
 
@@ -152,7 +152,8 @@ app.use((req, res) => {
 // tell the app to start listening for requests
 
 m.connect().then(() => {
-  app.listen(HTTP_PORT, host, () => { console.log("Ready to handle requests on port " + HTTP_PORT) });
+  app.listen(process.env.PORT || 3000, function(){console.log("Express server listening on port %d in %s mode", this.address().port, app.settings.env)});
+  //app.listen(HTTP_PORT, () => { console.log("Ready to handle requests on port " + HTTP_PORT) });
 })
   .catch((err) => {
     console.log("Unable to start the server:\n" + err);
