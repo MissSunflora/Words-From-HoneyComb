@@ -42,7 +42,13 @@ module.exports = function () {
           //'mongodb+srv://rjayroso-ong:321456@bti-ra6an.mongodb.net/test?retryWrites=true&w=majority',
           //mongodb+srv://nesa:^(Nesa69@cluster0-dbtwp.mongodb.net/test?retryWrites=true&w=majority
            'mongodb+srv://nesa:^(Nesa69@cluster0-dbtwp.mongodb.net/test?retryWrites=true&w=majority',
-             { connectTimeoutMS: 5000, useUnifiedTopology: true , dbName: "Terms"});
+             { connectTimeoutMS: 5000, useUnifiedTopology: true , dbName: "Terms"})
+             .then(() => {
+               return console.log("MondoDB good");
+             }).catch(err=> {
+               return console.log("MongoDB bad" + err);
+             })
+             ;
         
         // This one works for MongoDB Atlas...
         // (coming soon)
