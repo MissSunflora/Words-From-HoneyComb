@@ -11,7 +11,7 @@ mongoose.set('useCreateIndex', true);
 
 // Data entities; the standard format is:
 const englishTermSchema = require('./englishSchema.js');
-const otherTermSchema = require('./englishSchema.js');
+const otherTermSchema = require('./otherSchema.js');
 // Add others as needed
 
 
@@ -85,174 +85,262 @@ module.exports = function () {
       });
     },
 
+  /* ------------        ENGLISH            ------------- 
+*/
 
 
-    // ############################################################
 
-    englishTermGetAll: function () {
-      return new Promise(function (resolve, reject) {
+// ######################################-        ENGLISH           -##########################################
 
-        // Fetch all documents
-        // During development and testing, can "limit" the returned results to a smaller number
-        // Remove that function call when deploying into production
-        EnglishTerms.find()
-          .limit(20)
-          //.sort({ wordEnglish: 'asc'})
-          .exec((error, items) => {
-            if (error) {
-              // Query error
-              return reject(error.message);
-            }
-            // Found, a collection will be returned
-            return resolve(items);
-          });
-      })
-    },
+  //links.push({ "rel": "collection", "href": "/api/terms/english", "methods": "GET,POST" });
+  englishTermGetAll: function () {
+    return new Promise(function (resolve, reject) {
 
-    englishTermGetById: function (itemId) {
-      return new Promise(function (resolve, reject) {
-
-        console.log(itemId);
-        // Find one specific document
-        EnglishTerms.findById(itemId, (error, item) => {
+      // Fetch all documents
+      // During development and testing, can "limit" the returned results to a smaller number
+      // Remove that function call when deploying into production
+      EnglishTerms.find()
+        .limit(20)
+        //.sort({ wordEnglish: 'asc'})
+        .exec((error, items) => {
           if (error) {
-            // Find/match is not found
+            // Query error
             return reject(error.message);
           }
-          // Check for an item
-          if (item) {
-            // Found, one object will be returned
-            return resolve(item);
-          } else {
-            return reject('Not found');
-          }
+          // Found, a collection will be returned
+          return resolve(items);
         });
-      })
-    },
+    })
+  },
 
-    englishTermAdd: function (newItem) {
-      return new Promise(function (resolve, reject) {
+  //links.push({ "rel": "collection", "href": "/api/terms/english/:id", "methods": "GET" });
+  englishTermGetById: function (itemId) {
+    return new Promise(function (resolve, reject) {
 
-        EnglishTerms.create(newItem, (error, item) => {
-          if (error) {
-            // Cannot add item
-            return reject(error.message);
-          }
-          //Added object will be returned
+      console.log(itemId);
+      // Find one specific document
+      EnglishTerms.findById(itemId, (error, item) => {
+        if (error) {
+          // Find/match is not found
+          return reject(error.message);
+        }
+        // Check for an item
+        if (item) {
+          // Found, one object will be returned
           return resolve(item);
-        });
-      })
-    },
+        } else {
+          return reject('Not found');
+        }
+      });
+    })
+  },
+/*
+  //links.push({ "rel": "collection", "href": "/api/terms/english/name/:word", "methods": "GET" });
+  termGetByWord: async function(word) {
+    word = decodeURIComponent(word);
+    let results = await termEnglish.find({ wordEnglish: { $regex: word, $options: "i" } });
+    return results;
+},
 
-    englishTermEdit: function (newItem) {
-      return new Promise(function (resolve, reject) {
+  //links.push({ "rel": "collection", "href": "/api/terms/english/:id/add-definition", "methods": "POST" });
 
-        EnglishTerms.findByIdAndUpdate(newItem._id, newItem, { new: true }, (error, item) => {
-          if (error) {
-            // Cannot edit item
-            return reject(error.message);
-          }
-          // Check for an item
-          if (item) {
-            // Edited object will be returned
+termAddDefinitionEdit: async function (itemId, newItem) {
+
+  // Attempt to locate the existing document
+  let term = await termEnglish.findById(itemId);
+
+  if (term) {
+      term.definitions.push(newItem);
+      await term.save();
+      return term;
+  }
+  else {
+      throw "Not found";
+  }
+},
+  //links.push({ "rel": "collection", "href": "/api/terms/english/helpYes/:id", "methods": "PUT" });
+  termIncrementHelpYes: async function (itemId, newItem) {
+    if (newItem._id !== itemId) throw "ID not found";
+
+    let term = await termEnglish.findById(itemId);
+
+    if (term) {
+        term.helpYes++;
+        await term.save();
+        return term;
+    }
+    else {
+        throw "Not found";
+    }
+},
+
+  //links.push({ "rel": "collection", "href": "/api/terms/english/helpNo/:id", "methods": "PUT" });
+  termIncrementHelpNo: async function (itemId, newItem) {
+    if (newItem._id !== itemId) throw "ID not found";
+
+    let term = await termEnglish.findById(itemId);
+
+    if (term) {
+        term.helpNo++;
+        await term.save();
+        return term;
+    }
+    else {
+        throw "Not found";
+    }
+},
+
+  //links.push({ "rel": "collection", "href": "/api/terms/english/definition-like/:id", "methods": "PUT" });
+  termIncrementLikes: async function(itemId, newItem) {
+    let term = await termEnglish.findOne({"definitions._id": itemId});
+    // find id for definition
+    if (term) {
+        let def = term.definitions.id(itemId);
+        console.log(def);
+        def.likes++;
+        await term.save();
+        return term;
+    }
+    else throw "Not found";
+},
+*/
+  //links.push({ "rel": "collection", "href": "/api/terms/english/download", "methods": "GET" });
+  /* NOT IN USE !!
+  termAdd: function(newItem) {
+    return new Promise((resolve, reject) => {
+
+        termEnglish.create(newItem, (error, item) => {
+            if (error) {
+                // Cannot add item
+                return reject(error.message);
+            }
+            // Added object will be returned
             return resolve(item);
-          } else {
-            return reject('Not found');
-          }
-        });
-      })
-    },
-
-    /*
-    carDelete: function (itemId) {
-      return new Promise(function (resolve, reject) {
-
-        EnglishTerms.findByIdAndRemove(itemId, (error) => {
-          if (error) {
-            // Cannot delete item
-            return reject(error.message);
-          }
-          // Return success, but don't leak info
-          return resolve();
         })
-      })
-    }
-    */
+    })
+},*/
 
-   // #########################################################################
-  
-    otherTermGetAll: function () {
-      return new Promise(function (resolve, reject) {
+// ######################################-        OTHER           -##########################################
+/*   
+  //links.push({ "rel": "collection", "href": "/api/terms/other", "methods": "GET,POST" });
+  otherGetAll: function() {
+            return new Promise((resolve, reject) => {
+                termNonEnglish.find()
+                .sort({wordNonEnglish: 'asc'})
+                .exec((error, items) => {
+                    if (error) {
+                      // Query error
+                      return reject(error.message);
+                    }
+                    // Found, a collection will be returned
+                    return resolve(items);
+                  });
+            })
+        },
 
-        // Fetch all documents
-        // During development and testing, can "limit" the returned results to a smaller number
-        // Remove that function call when deploying into production
-        OtherTerms.find()
-          .limit(20)
-          .sort({ make: 'asc', model: 'asc', year: 'asc' })
-          .exec((error, items) => {
-            if (error) {
-              // Query error
-              return reject(error.message);
-            }
-            // Found, a collection will be returned
-            return resolve(items);
-          });
-      })
-    },
-
-    otherTermGetById: function (itemId) {
-      return new Promise(function (resolve, reject) {
+  //links.push({ "rel": "collection", "href": "/api/terms/other/:id", "methods": "GET" });
+  otherGetById: function(itemId) {
+    return new Promise((resolve, reject) => {
 
         // Find one specific document
-        OtherTerms.findById(itemId, (error, item) => {
-          if (error) {
-            // Find/match is not found
-            return reject(error.message);
-          }
-          // Check for an item
-          if (item) {
-            // Found, one object will be returned
-            return resolve(item);
-          } else {
-            return reject('Not found');
-          }
+        termNonEnglish.findById(itemId)
+        .exec((error, item) => {
+            if (error) {
+                return reject(error.message);
+            }
+            if (item) {
+                return resolve(item);
+            }
+            else {
+                return reject('Not found');
+            }
         });
-      })
-    },
+    })
+},
 
-    otherTermAdd: function (newItem) {
-      return new Promise(function (resolve, reject) {
+  //links.push({ "rel": "collection", "href": "/api/terms/other/name/:word", "methods": "GET" });
+  otherGetByWord: async function(word) {
+    word = decodeURIComponent(word);
+    let results = await termNonEnglish.find({ wordNonEnglish: { $regex: word, $options: "i" } });
+    return results;
+},
 
-        OtherTerms.create(newItem, (error, item) => {
-          if (error) {
-            // Cannot add item
-            return reject(error.message);
-          }
-          //Added object will be returned
-          return resolve(item);
-        });
-      })
-    },
-
-    otherTermEdit: function (newItem) {
-      return new Promise(function (resolve, reject) {
-
-        OtherTerms.findByIdAndUpdate(newItem._id, newItem, { new: true }, (error, item) => {
-          if (error) {
-            // Cannot edit item
-            return reject(error.message);
-          }
-          // Check for an item
-          if (item) {
-            // Edited object will be returned
-            return resolve(item);
-          } else {
-            return reject('Not found');
-          }
-
-        });
-      })
+  //links.push({ "rel": "collection", "href": "/api/terms/other/definition-like/:idn", "methods": "POST" });
+  otherIncrementLikes: async function(itemId, newItem) {
+    let term = await termNonEnglish.findOne({"definitions._id": itemId});
+    console.log(term);
+    // find id for definition
+    if (term) {
+        let def = term.definitions.id(itemId);
+        console.log(def);
+        def.likes++;
+        await term.save();
+        return term;
     }
+    else throw "Not found";
+},
+
+
+ // links.push({ "rel": "collection", "href": "/api/terms/other/helpYes/:id", "methods": "PUT" });
+ otherIncrementHelpYes: async function (itemId, newItem) {
+  if (newItem._id !== itemId) throw "ID not found";
+  let term = await termNonEnglish.findById(itemId);
+
+  if (term) {
+      term.helpYes++;
+      await term.save();
+      return term;
+  }
+  else {
+      throw "Not found";
+  }
+},
+
+  //links.push({ "rel": "collection", "href": "/api/terms/other/helpNo/:id", "methods": "PUT" });
+  otherIncrementHelpNo: async function (itemId, newItem) {
+    if (newItem._id !== itemId) throw "ID not found";
+    let term = await termNonEnglish.findById(itemId);
+
+    if (term) {
+        term.helpNo++;
+        await term.save();
+        return term;
+    }
+    else {
+        throw "Not found";
+    }
+},
+
+  //links.push({ "rel": "collection", "href": "/api/terms/other/definition-like/:id", "methods": "PUT" });
+  otherAddDefinitionEdit: async function (itemId, newItem) {
+
+    // Attempt to locate the existing document
+    let term = await termNonEnglish.findById(itemId);
+    console.log(term)
+    if (term) {
+        term.definitions.push(newItem);
+        await term.save();
+        return term;
+    }
+    else {
+        throw "Not found";
+    }
+},*/
+  //links.push({ "rel": "collection", "href": "/api/terms/other/download", "methods": "GET" });
+
+  /*NOT IN USE
+  otherAdd: function(newItem) {
+            return new Promise((resolve, reject) => {
+
+                termNonEnglish.create(newItem, (error, item) => {
+                    if (error) {
+                        // Cannot add item
+                        return reject(error.message);
+                    }
+                    // Added object will be returned
+                    return resolve(item);
+                })
+            })
+        }, */
   } // return statement that encloses all the function members
 } // module.exports

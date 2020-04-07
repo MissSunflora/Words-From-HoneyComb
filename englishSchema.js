@@ -1,39 +1,27 @@
-
-// Setup
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
-// Entity schema
+var Definitions = require('./defSchema');
 
 var engSchema = new Schema({
-   // _id : String,
-    wordEnglish : String,
-    wordNonEnglish : String,
-    wordExpanded : String,
-    languageCode : String,
-    image : String,
-    imageType : String,
-    audio : String,
-    audioType : String,
-    linkAuthoritative : String,
-    linkWikipedia : String,
-    linkYouTube : String,
-    authorName : String,
-    dateCreated : String,
-    dateRevised : String,
-    fieldOfStudy : String,
-    helpYes : Number,
-    helpNo : Number,
-    Definitions: [
-        {
-            authorName: String,
-            dateCreated: String,
-            definition: String,
-            quality: String,
-            likes: String
-        }
-    ]
+    wordEnglish: {type: String, required: true},
+    wordNonEnglish: String,
+    wordExpanded: String,
+    languageCode: {type: String, required: true},
+    image: String,
+    imageType: String,
+    audio: String,
+    audioType: String,
+    linkAuthoritative: String,
+    linkWikipedia: String,
+    linkYoutube: String,
+    authorName: String,
+    dateCreated: {type: Date, required: true},
+    dateRevised: {type: Date, required: true},
+    fieldOfStudy: String,
+    helpYes: Number,
+    helpNo: Number,
+    definitions: [Definitions]
 });
 
-// Make schema available to the application
 module.exports = engSchema;
