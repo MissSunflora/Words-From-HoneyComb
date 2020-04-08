@@ -47,6 +47,7 @@ app.get("/api", (req, res) => {
   // This app's resources...
   //https://polar-stream-23993.herokuapp.com/api/terms/english/helpyes/5e8c1eda1c9d4400004402a4"
   /* ------------        ENGLISH            ------------- */
+  //https://polar-stream-23993.herokuapp.com/api/terms/english
   links.push({ "rel": "collection", "href": "/api/terms/english", "methods": "GET,POST" });
   links.push({ "rel": "collection", "href": "/api/terms/english/:id", "methods": "GET" });
   links.push({ "rel": "collection", "href": "/api/terms/english/name/:word", "methods": "GET" });
@@ -180,6 +181,16 @@ app.get('/api/terms/english/download', (req, res) => {
   })
 });
 
+app.post('/api/terms/english', (req, res) => {
+  // Call the manager method
+  m.englishTermAdd(req.body)
+    .then((data) => {
+      res.json(data);
+    })
+    .catch((error) => {
+      res.status(500).json({ "message": error });
+    })
+});
 
 // ######################################-        OTHER           -##########################################
 
