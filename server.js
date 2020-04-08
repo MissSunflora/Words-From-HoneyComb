@@ -94,7 +94,16 @@ app.get("/api/terms/english", (req, res) => {
     })
 });
 
-
+app.post("/api/terms/english", (req, res) => {
+  // Call the manager method
+  m.englishTermAdd(req.body)
+    .then((data) => {
+      res.json(data);
+    })
+    .catch((error) => {
+      res.status(500).json({ "message": error });
+    })
+});
 // Get one ENGLISH
 //links.push({ "rel": "collection", "href": "/api/terms/english/:id", "methods": "GET" });
 app.get("/api/terms/english/:id", (req, res) => {
@@ -181,16 +190,7 @@ app.get('/api/terms/english/download', (req, res) => {
   })
 });
 
-app.post('/api/terms/english', (req, res) => {
-  // Call the manager method
-  m.englishTermAdd(req.body)
-    .then((data) => {
-      res.json(data);
-    })
-    .catch((error) => {
-      res.status(500).json({ "message": error });
-    })
-});
+
 
 // ######################################-        OTHER           -##########################################
 
