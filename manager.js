@@ -203,22 +203,7 @@ termAddDefinitionEdit: async function (itemId, newItem) {
     }
     else throw "Not found";
 },
-/**/
-  //links.push({ "rel": "collection", "href": "/api/terms/english/download", "methods": "GET" });
-  /* NOT IN USE !!
-  termAdd: function(newItem) {
-    return new Promise((resolve, reject) => {
 
-        EnglishTerms.create(newItem, (error, item) => {
-            if (error) {
-                // Cannot add item
-                return reject(error.message);
-            }
-            // Added object will be returned
-            return resolve(item);
-        })
-    })
-},*/
 
 // ######################################-        OTHER           -##########################################
   
@@ -325,22 +310,6 @@ termAddDefinitionEdit: async function (itemId, newItem) {
     else {
         throw "Not found";
     }
-},/* */
-  //links.push({ "rel": "collection", "href": "/api/terms/other/download", "methods": "GET" });
-
-  /*NOT IN USE
-  otherAdd: function(newItem) {
-            return new Promise((resolve, reject) => {
-
-                OtherTerms.create(newItem, (error, item) => {
-                    if (error) {
-                        // Cannot add item
-                        return reject(error.message);
-                    }
-                    // Added object will be returned
-                    return resolve(item);
-                })
-            })
-        }, */
+}
   } // return statement that encloses all the function members
 } // module.exports
